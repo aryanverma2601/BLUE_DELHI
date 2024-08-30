@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #6C55F9;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+        .user-message {
+            background-color: #e6e6e6;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .ai-message {
+            background-color: #6C55F9;
+            color: #ffffff;
+        }
+        .chat-input {
+            display: flex;
+            padding: 20px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #send-button {
+            background-color: #6C55F9;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0 15px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.anchor1{
+    color: black;
+}
+.main_container_0{
+    display: flex;
+    justify-content:space-between;
+}
+.container2{
+    display: flex;
+    margin-top: 50px;
+    margin-right: 155px;
+    
+}
+.logo{
+    margin-left: 140px;
+}
+#map1{
+    color: #6C55F9;
+}
+    </style>
+</head>
+<body>
+    <div >
+        <nav  class="main_container_0">
+            <div class="logo">
+                <a class="navbar-brand" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_of_India_logo.svg" alt="Logo" height="100px" width="100px" class="d-inline-block align-text-top">
+        
+                  </a>
+    
+            </div>
+            <div class="container2">
+                <div class="anchor_container">
+                    <a class="anchor1" href="index.html">Home</a>
+                </div>
+                <div class="anchor_container2">
+                    <a  class="anchor1" href="about.html">About</a>
+                </div>
+               <div class="anchor_container3">
+                <a  class="anchor1" href="blog.html">Blog</a>
+               </div>
+               <div class="anchor_container4">
+                <a class="anchor1" href="index4.html" >Map</a>
+                </div>
+                <div class="anchor_container4">
+                    <a class="anchor1" href="ai.html" id="map1">Ask Ai</a>
+                    </div>
+                <div class="anchor_container5">
+                <a class="anchor1" href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+                <div class="chat-container">
+                    <div class="chat-header">
+                        Chat with Blue.AI
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Messages will be dynamically added here -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="Type your message...">
+                        <button id="send-button">Send</button>
+                    </div>
+                </div>
+                
+               
+            </div>
+       
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        function addMessage(content, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        
+    // ... existing code ...
+
+    function getAIResponse(userMessage) {
+        // Simple keyword-based response system
+        const lowercaseMessage = userMessage.toLowerCase();
+        
+        if (lowercaseMessage.includes('water') || lowercaseMessage.includes('bodies')) {
+            return "Blue.AI: There are many different types of water bodies on Earth, including oceans, seas, rivers, lakes, ponds, glaciers, lagoons, brooks, canals, and reservoirs. Each type has unique characteristics and plays important roles in our ecosystem.";
+        } else if (lowercaseMessage.includes('hello') || lowercaseMessage.includes('hi')) {
+            return "Blue.AI: Hello! It's nice to meet you. How can I assist you today?";
+        } else if (lowercaseMessage.includes('how are you')) {
+            return "Blue.AI: As an AI, I don't have feelings, but I'm functioning well and ready to help you. What would you like to know?";
+        } else if (lowercaseMessage.includes('bye') || lowercaseMessage.includes('goodbye')) {
+            return "Blue.AI: Goodbye! It was nice chatting with you. Feel free to return if you have more questions.";
+        }else if(lowercaseMessage.includes('yamuna river') || lowercaseMessage.includes('about yamuna river')){
+            return"Blue.AI: The Yamuna  is the second-largest tributary river of the Ganges by discharge and the longest tributary in India.Water is a crucial element of nature, and all civilizations have advanced near rivers. Nowadays, due to higher development activities with the massive population growth, the quality and quantity of water have become a sensitive issue, and freshwater will be scanty after a while (Pinto & Maheshwari 2011) Progressively worsening water quality results from rapid industrialization and urban sprawling, degrading the environment. Wastewater from the municipality and industry creates degradation in river quality and crucial global issues (González et al. 2014). The aquatic systems play an essential role in carrying the pollutants accountable for water contamination (Shrestha & Kazama 2007). These contaminants stabilize with the system's physical, chemical, and biological processes. The pollution level rises when the river assimilation capacity is lower than the pollutants added to the water. The self-assimilation of aquatic systems is a complex phenomenon, including physiochemical and biological reactions";
+           return" Blue.AI: In the waterbodies, dissolved oxygen (DO) depletes due to organic pollutants from wastewater. DO and biochemical oxygen demand (BOD) indicate the presence of organic substances (Basant et al. 2010). The oxygen-demanding contaminants' natural purification depends on the required oxygen to be concentrated, the oxygen necessary to secure the ecosystem qualities fit for species with designated standards, and the aquatic system's BOD purifying extent, which is assessed by reduction and replenishment of oxygen"; 
+
+        }
+        else if(lowercaseMessage.includes('delhi')){
+            return "Blue.AI: There are many water bodies in delhi.The largest water body is Yamuna river and other are small lakes."
+        }
+        else if(lowercaseMessage.includes('about this website') || lowercaseMessage.includes('about website')){
+            return "Blue.AI: This website is about the information and quality of water bodies in delhi.Here, user can post conditions of water body and can earn points to win amazing awards."
+        }
+        else if(lowercaseMessage.includes('about hauz khas lake')||lowercaseMessage.includes('hauz khas lake')||lowercaseMessage.includes('hauz khas')){
+            return "Blue.AI: Hauz Khas Lake is a historic reservoir located in the Hauz Khas complex in South Delhi. It was originally constructed in the 13th century by Alauddin Khilji to supply water to the inhabitants of Siri Fort. The lake is surrounded by a lush green park and is a popular spot for visitors, offering scenic views and a peaceful environment amidst the bustling city."
+        }
+        else if(lowercaseMessage.includes('other lakes')){
+            return "Blue.AI: Delhi's lakes have diverse pollution and cleanliness profiles, reflecting the challenges of urbanization and environmental management.Bhalswa Lake has struggled with moderate pollution, largely due to its proximity to landfills and waste disposal sites. The lake has seen efforts for cleanup, but pollution remains a significant issue.Hauz Khas Lake, once a historic reservoir, is now facing severe pollution. The accumulation of waste and the growth of algal blooms have deteriorated its water quality, making it one of the more polluted water bodies in the city.In contrast, Sanjay Van Lake is relatively cleaner, benefiting from its location within a forested area. The surrounding greenery contributes to better water quality, though it still requires regular monitoring to maintain its condition.Najafgarh Lake, on the other hand, is one of the most polluted lakes in Delhi. Industrial waste, sewage, and encroachments have severely affected the lake, leading to a significant decline in water quality and posing serious environmental and health risks.Naini Lake, situated in Model Town, maintains a moderate level of cleanliness and serves as a recreational spot for locals. However, urban runoff and improper waste disposal continue to threaten its water quality.Finally, Sanjay Lake in East Delhi has been dealing with moderate pollution due to sewage inflow and garbage dumping. Although efforts are being made to restore and clean the lake, the battle against pollution is ongoing.These lakes illustrate the varying degrees of environmental degradation and the continuous efforts required to maintain and restore Delhi's natural water bodies.Bhalswa Lake has struggled with moderate pollution, largely due to its proximity to landfills and waste disposal sites. The lake has seen efforts for cleanup, but pollution remains a significant issue"
+        }
+        else {
+            return "Blue.AI: I'm sorry, I don't have specific information about that. Is there anything else I can help you with regarding water bodies or general information?";
+        }
+    }
+
+    // ... rest of the existing code ...
+
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage("You: " + message, true);
+                userInput.value = '';
+                
+                // Simulate AI response after a short delay
+                setTimeout(() => {
+                    const aiResponse = getAIResponse(message);
+                    addMessage(aiResponse, false);
+                }, 1000);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initial greeting
+        addMessage("Blue.AI: Hello! How can I assist you today?", false);
+    </script>
+</body>
+</html>

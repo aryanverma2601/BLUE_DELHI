@@ -6,6 +6,29 @@
   License URI: https://creativecommons.org/licenses/by/4.0/
   Version: 1.0
  */
+ #con{
+  display: flex;
+  justify-content: center;
+ }
+#one{
+  background-color: #000000;
+}
+.mb-4{
+  color: white;
+}
+#sec{
+  color: white;
+}
+ #ima{
+  height: 250px;
+  width: 300px;
+ }
+
+#img-fluid{
+  height: 350px;
+  width: 350px;
+}
+
 
 /* Upload Section */
 #upload {
@@ -13,17 +36,25 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  
+ 
 }
 
 .upload-container {
   max-width: 600px;
   margin: 0 auto;
-  background: #003366; /* White background for the form container */
+  background: #1f1e26; /* White background for the form container */
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
+
+}
+.img_container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .upload-container::before {
@@ -48,11 +79,11 @@
   font-size: 18px;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #003366; /* Matching the header color */
+  color: #ffffff; /* Matching the header color */
 }
 
 .form-input {
-  border: 2px solid #003366; /* Border color matching header */
+  border: 2px solid #ffffff; /* Border color matching header */
   padding: 12px;
   border-radius: 8px;
   font-size: 16px;
@@ -116,7 +147,7 @@ button[type="submit"]:hover {
 
 
 :root {
-  --primary: #6C55F9;
+  --primary: ;
   --accent: #FF3D85;
   --secondary: #645F88;
   --success: #35bb78;
@@ -1451,6 +1482,7 @@ a.text-dark:hover, a.text-dark:focus {
   padding-bottom: 80px;
   color: #898798;
   overflow: hidden;
+  
 }
 
 .page-banner {

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure Delhi - Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+
+.header-title {
+    position: relative;
+    z-index: 1;
+}
+
+.water-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('hackathon/download.jpeg'); /* Placeholder for water texture */
+    background-size: cover;
+    animation: wave 10s infinite linear;
+    z-index: 0;
+}
+
+@keyframes wave {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: 100px 0px;
+    }
+}
+
+
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0 15px;
+}
+
+main {
+    padding: 20px;
+    margin-bottom: 50px; /* Add space for the footer */
+}
+
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color:black  ;
+    color: white;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    margin: 20px 0;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #6d58f0;
+}
+#search-section {
+    margin: 20px 0;
+}
+
+#search-input {
+    padding: 10px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#search-button {
+    padding: 10px 20px;
+    background-color: #6d58f0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #5840f4;
+}
+
+.hidden {
+    display: none;
+}
+a{
+    text-decoration: none;
+    color:black;
+}
+#survey-graph {
+    margin-top: 20px;
+    display: none; /* Initially hidden */
+}
+
+#survey-graph h2 {
+    color: #003d66;
+    text-align: center;
+}
+
+#surveyChart {
+    max-width: 100%;
+    height: auto;
+}
+.anchor1{
+    color: black;
+}
+.main_container_0{
+    display: flex;
+    justify-content:space-between;
+}
+.container2{
+    display: flex;
+    margin-top: 50px;
+    margin-right: 155px;
+    
+}
+.logo{
+    margin-left: 140px;
+}
+#map1{
+    color: #6C55F9;
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav  class="main_container_0">
+        <div class="logo">
+            <a class="navbar-brand" href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_of_India_logo.svg" alt="Logo" height="100px" width="100px" class="d-inline-block align-text-top">
+    
+              </a>
+
+        </div>
+        <div class="container2">
+            <div class="anchor_container">
+                <a class="anchor1" href="index.html">Home</a>
+            </div>
+            <div class="anchor_container2">
+                <a  class="anchor1" href="about.html">About</a>
+            </div>
+           <div class="anchor_container3">
+            <a  class="anchor1" href="blog.html">Blog</a>
+           </div>
+           <div class="anchor_container4">
+            <a class="anchor1" href="index4.html" id="map1">Map</a>
+            </div>
+            <div class="anchor_container4">
+                <a class="anchor1" href="ai.html">Ask Ai</a>
+                </div>
+            <div class="anchor_container5">
+            <a class="anchor1" href="contact.html">Contact</a>
+            </div>
+            
+           
+        </div>
+
+    </nav>
+   
+    <main>
+        <div class="container">
+            <h2>Survey Data of Delhi Water Bodies</h2>
+            <section id="search-section">
+                <input type="text" id="search-input" placeholder="Search for a water body...">
+                <button id="search-button" onclick="searchWaterBody()">Search</button>
+            </section>
+            <table id="water-body-table">
+                <thead>
+                    <tr>
+                        <th>Water Body</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Survey Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://en.wikipedia.org/wiki/Yamuna" target="_blank">Yamuna River</a></td>
+                        <td>Delhi</td>
+                        <td>Clean</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://en.wikipedia.org/wiki/Hauz_Khas" target="_blank">Hauz Khas Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Polluted</td>
+                        <td>2024-08-05</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://en.wikipedia.org/wiki/Bhalswa_Lake" target="_blank">Bhalswa Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Moderately Polluted</td>
+                        <td>2024-07-20</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Sanath Nagar Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Stable</td>
+                        <td>2024-06-15</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Aravali Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Good</td>
+                        <td>2024-05-10</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Najafgarh Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Highly Polluted</td>
+                        <td>2024-04-05</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Sanjay Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Moderately polluted</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Naini Lake</a> </td>
+                        <td>Delhi</td>
+                        <td>Clean</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Roshanara Garden Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Stable</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Nekpur lake</a></td>
+                        <td>Delhi</td>
+                        <td>Highly polluted</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Sukhdev Vihar Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Clean</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" target="_blank">Tihar Lake</a></td>
+                        <td>Delhi</td>
+                        <td>Stable</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Map of Delhi Water Bodies</h2>
+            <div id="map"></div>
+
+            <section id="survey-history">
+                <h2>Surveys History</h2>
+                <p>Here, you will find a detailed history of past surveys conducted on water bodies in Delhi. This section will provide insights into the changes and improvements observed over time.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Survey Date</th>
+                            <th>Water Body</th>
+                            <th>Observations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-07-15</td>
+                            <td>Yamuna River</td>
+                            <td>Increased pollution levels compared to last year.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-06-20</td>
+                            <td>Hauz Khas Lake</td>
+                            <td>High algal bloom detected.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-05-10</td>
+                            <td>Bhalswa Lake</td>
+                            <td>Moderate pollution; some improvement in water quality.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-04-05</td>
+                            <td>Sanath Nagar Lake</td>
+                            <td>Low water levels; water quality remains stable.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-03-25</td>
+                            <td>Sanjay Lake</td>
+                            <td>Decreased pollution; signs of recovery in water quality.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-02-15</td>
+                            <td>Naini Lake</td>
+                            <td>Increased algal bloom; need for remediation efforts.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-10</td>
+                            <td>Roshanara Garden Lake</td>
+                            <td>Good water quality; no significant issues detected.</td>
+                        </tr>
+                        <tr>
+                            <td>2023-12-20</td>
+                            <td>Nekpur Lake</td>
+                            <td>High pollution levels; immediate attention required.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-07-15</td>
+                            <td>Purana Qila Lake</td>
+                            <td>Increased pollution levels compared to last year.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-06-20</td>
+                            <td>Sukhdev Vihar Lake</td>
+                            <td>High algal bloom detected.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-06-20</td>
+                            <td>Aravali Lake</td>
+                            <td>High algal bloom detected.</td>
+                        </tr>
+                        <tr>
+                            <td>2024-05-10</td>
+                            <td>Najafgarh Lake</td>
+                            <td>Moderate pollution; some improvement in water quality.</td>
+                        </tr> 
+                        <tr>
+                            <td>2024-05-10</td>
+                            <td>Tihar lake</td>
+                            <td>Moderate pollution; some improvement in water quality.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="survey-graph">
+                <h2 style="color: #6C55F9;">Survey History Graph</h2>
+                <canvas id="surveyChart" width="400" height="200"></canvas>
+            </section>
+            
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Government of Delhi. All rights reserved.</p>
+    </footer>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+var map = L.map('map').setView([28.7041, 77.1025], 11); // Coordinates for Delhi
+
+// Add the OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+}).addTo(map);
+
+// Function to add colored circle markers to the map
+function addCircleMarker(name, lat, lon, color) {
+    L.circleMarker([lat, lon], {
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.7,
+        radius: 10
+    }).addTo(map)
+    .bindPopup(`<b>${name}</b>`)
+    .openPopup();
+}
+
+// Add circle markers for the listed water bodies with different colors
+addCircleMarker('Yamuna River', 28.6545, 77.2481, '#ff0000'); // Red
+addCircleMarker('Hauz Khas Lake', 28.5506, 77.1971, '#0000ff'); // Blue
+addCircleMarker('Bhalswa Lake', 28.7213, 77.1684, '#00ff00'); // Green
+addCircleMarker('Sanath Nagar Lake', 28.5873, 77.2715, '#ff00ff'); // Magenta
+addCircleMarker('Aravali Lake', 28.4818, 77.1838, '#ffa500'); // Orange
+addCircleMarker('Najafgarh Lake', 28.6090, 76.9999, '#00ffff'); // Cyan
+addCircleMarker('Sanjay Lake', 28.6205, 77.2917, '#800080'); // Purple
+addCircleMarker('Naini Lake', 28.6926, 77.1536, '#ff6347'); // Tomato
+addCircleMarker('Roshanara Garden Lake', 28.6788, 77.2035, '#008000'); // Dark Green
+addCircleMarker('Nekpur Lake', 28.7581, 77.0742, '#ff1493'); // Deep Pink
+addCircleMarker('Purana Qila Lake', 28.6080, 77.2410, '#8b0000'); // Dark Red
+addCircleMarker('Sukhdev Vihar Lake', 28.5543, 77.2709, '#00008b'); // Dark Blue
+addCircleMarker('Tihar Lake', 28.6411, 77.1262, '#4682b4'); // Steel Blue
+
+// Function to search for a water body in the table and highlight it on the map
+function searchWaterBody() {
+    var input = document.getElementById('search-input').value.toLowerCase();
+    var table = document.getElementById('water-body-table');
+    var tr = table.getElementsByTagName('tr');
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (var i = 1; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName('td')[0];
+        if (td) {
+            var txtValue = td.textContent || td.innerText;
+            if (txtValue.toLowerCase().indexOf(input) > -1) {
+                tr[i].style.display = "";
+                // Zoom to the marker on the map if found
+                var name = txtValue.toLowerCase();
+                switch (name) {
+                    case 'yamuna river':
+                        map.setView([28.6545, 77.2481], 13);
+                        break;
+                    case 'hauz khas lake':
+                        map.setView([28.5506, 77.1971], 13);
+                        break;
+                    case 'bhalswa lake':
+                        map.setView([28.7213, 77.1684], 13);
+                        break;
+                    case 'sanath nagar lake':
+                        map.setView([28.5873, 77.2715], 13);
+                        break;
+                    case 'aravali lake':
+                        map.setView([28.4818, 77.1838], 13);
+                        break;
+                    case 'najafgarh lake':
+                        map.setView([28.6090, 76.9999], 13);
+                        break;
+                    case 'sanjay lake':
+                        map.setView([28.6205, 77.2917], 13);
+                        break;
+                    case 'naini lake':
+                        map.setView([28.6926, 77.1536], 13);
+                        break;
+                    case 'roshanara garden lake':
+                        map.setView([28.6788, 77.2035], 13);
+                        break;
+                    case 'nekpur lake':
+                        map.setView([28.7581, 77.0742], 13);
+                        break;
+                    case 'purana qila lake':
+                        map.setView([28.6080, 77.2410], 13);
+                        break;
+                    case 'sukhdev vihar lake':
+                        map.setView([28.5543, 77.2709], 13);
+                        break;
+                    case 'tihar lake':
+                        map.setView([28.6411, 77.1262], 13);
+                        break;
+                }
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const searchButton = document.getElementById("search-button");
+    const searchInput = document.getElementById("search-input");
+    const surveyHistoryTable = document.querySelector("#survey-history table tbody");
+
+    // Function to search water bodies
+    function searchWaterBody() {
+        const searchTerm = searchInput.value.toLowerCase();
+        filterSurveyHistory(surveyHistoryTable, searchTerm);
+    }
+
+    // Function to filter survey history table
+    function filterSurveyHistory(table, searchTerm) {
+        const rows = table.getElementsByTagName("tr");
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            const waterBody = cells[1].textContent.toLowerCase();
+            if (waterBody.includes(searchTerm)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    // Attach the search function to the button click event
+    searchButton.addEventListener("click", searchWaterBody);
+
+    // Optional: Allow pressing 'Enter' to trigger the search
+    searchInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            searchWaterBody();
+        }
+    });
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const searchButton = document.getElementById("search-button");
+    const searchInput = document.getElementById("search-input");
+    const surveyHistoryTable = document.querySelector("#survey-history table tbody");
+    const surveyGraphSection = document.getElementById("survey-graph");
+    const surveyChartCanvas = document.getElementById("surveyChart");
+
+    let surveyChart;
+
+    // Function to search water bodies
+    function searchWaterBody() {
+        const searchTerm = searchInput.value.toLowerCase();
+        filterSurveyHistory(surveyHistoryTable, searchTerm);
+        updateSurveyGraph(searchTerm);
+    }
+
+    // Function to filter survey history table
+    function filterSurveyHistory(table, searchTerm) {
+        const rows = table.getElementsByTagName("tr");
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            const waterBody = cells[1].textContent.toLowerCase();
+            if (waterBody.includes(searchTerm)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    // Function to update the survey history graph
+    function updateSurveyGraph(searchTerm) {
+        const rows = surveyHistoryTable.getElementsByTagName("tr");
+        const labels = [];
+        const data = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            const waterBody = cells[1].textContent.toLowerCase();
+            if (waterBody.includes(searchTerm)) {
+                labels.push(cells[0].textContent); // Survey Date
+                data.push(cells[2].textContent); // Observations
+            }
+        }
+
+        // Destroy previous chart instance if it exists
+        if (surveyChart) {
+            surveyChart.destroy();
+        }
+
+        // Create a new chart
+        surveyChart = new Chart(surveyChartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Survey Observations',
+                    data: data,
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Show the graph section
+        surveyGraphSection.style.display = "block";
+    }
+
+    // Attach the search function to the button click event
+    searchButton.addEventListener("click", searchWaterBody);
+
+    // Optional: Allow pressing 'Enter' to trigger the search
+    searchInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            searchWaterBody();
+        }
+    });
+
+    // Initially hide the graph section
+    surveyGraphSection.style.display = "none";
+});
+    </script>
+</body>
+</html>

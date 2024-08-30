@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Page</title>
+    <style>
+        body {
+    background-color:white;
+    color:black;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    background-color:#6C55F9;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+}
+
+.coin-display {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.reward-list {
+    margin-top: 20px;
+}
+
+.reward {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color:white;
+    border-radius: 5px;
+}
+
+.reward h3 {
+    margin: 0;
+}
+
+.locked {
+    color: red;
+}
+
+.unlocked {
+    color: green;
+}
+
+#uploadButton {
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#uploadButton:hover {
+    background-color: #cc7a00;
+}
+#reward01{
+    color: white;
+}
+#home{
+    color: white;
+    font-size: 25px;
+    text-decoration:none;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="reward01">My Rewards</h1>
+        <div class="coin-display">
+            <span  id="coinCount">0</span> Coins
+        </div>
+        <div class="reward-list">
+            <div class="reward" id="tattooReward">
+                <h3>Tattoo - 100 Coins</h3>
+                <p class="locked">Locked</p>
+            </div>
+            <div class="reward" id="diaryReward">
+                <h3>Diary - 200 Coins</h3>
+                <p class="locked">Locked</p>
+            </div>
+            <div class="reward" id="tshirtReward">
+                <h3>T-shirt - 500 Coins</h3>
+                <p class="locked">Locked</p>
+            </div>
+            <div class="reward" id="bigReward">
+                <h3>Something Big - 1000 Coins</h3>
+                <p class="locked">Locked</p>
+            </div>
+        </div>
+        <input type="file" id="photoUpload" accept="image/*">
+        <button id="uploadButton">Upload Photo</button>
+        <a href="index.html" id="home">Home</a>
+
+    </div>
+    <script>
+        let coinCount = 0;
+
+const coinDisplay = document.getElementById('coinCount');
+const tattooReward = document.getElementById('tattooReward').querySelector('p');
+const diaryReward = document.getElementById('diaryReward').querySelector('p');
+const tshirtReward = document.getElementById('tshirtReward').querySelector('p');
+const bigReward = document.getElementById('bigReward').querySelector('p');
+const uploadButton = document.getElementById('uploadButton');
+const photoUpload = document.getElementById('photoUpload');
+
+uploadButton.addEventListener('click', () => {
+    if (photoUpload.files.length > 0) {
+        addCoins(10); // Award 50 coins for each photo upload
+        photoUpload.value = ''; // Clear the input after upload
+    } else {
+        alert('Please select a photo to upload.');
+    }
+});
+
+function addCoins(amount) {
+    coinCount += amount;
+    coinDisplay.textContent = coinCount;
+    checkRewards();
+}
+
+function checkRewards() {
+    if (coinCount >= 100) {
+        tattooReward.textContent = 'Unlocked';
+        tattooReward.classList.remove('locked');
+        tattooReward.classList.add('unlocked');
+    }
+    if (coinCount >= 200) {
+        diaryReward.textContent = 'Unlocked';
+        diaryReward.classList.remove('locked');
+        diaryReward.classList.add('unlocked');
+    }
+    if (coinCount >= 500) {
+        tshirtReward.textContent = 'Unlocked';
+        tshirtReward.classList.remove('locked');
+        tshirtReward.classList.add('unlocked');
+    }
+    if (coinCount >= 1000) {
+        bigReward.textContent = 'Unlocked';
+        bigReward.classList.remove('locked');
+        bigReward.classList.add('unlocked');
+    }
+}
+    </script>
+</body>
+</html>
