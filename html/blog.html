@@ -4,336 +4,493 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pure Delhi - Blog</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4ff;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: row;
+            background-color: #f0f0f0;
+            color: #14171a;
         }
-
-        /* Side Menu */
-        .side-menu {
-            width: 250px;
-            background-color: #6C55F9;
-            color: white;
-            height: 100vh;
-            position: fixed;
+        /* .navbar {
+            background-color: #1da1f2;
+            padding: 10px;
+            position: fixed; 
             top: 0;
             left: 0;
-            padding-top: 20px;
+            right: 0;
+            z-index: 1000;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1;
-        }
-
-        .side-menu a {
-            padding: 10px 15px;
-            text-decoration: none;
+            justify-content: center;
+        } */
+        /* .navbar a {
             color: white;
-            width: 100%;
-            text-align: center;
-            margin-bottom: 10px;
-            border-radius: 8px;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        } */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            padding: 20px;
         }
-
-        .side-menu a:hover {
-            background-color: #4B3BBF;
+        .sidebar {
+            width: 250px;
+            margin-right: 20px;
         }
-
-        .container, .trending-container {
-            margin-left: 270px;
-            width: calc(100% - 270px);
-            max-width: 1000px; /* Decreased width for trending section */
-            padding: 40px;
-            margin-top: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            display: none; /* Hide sections by default */
+        .content {
+            width: 600px;
         }
-
-        .container.active, .trending-container.active {
-            display: block; /* Show active section */
+        .suggestions {
+            width: 250px;
+            margin-left: 20px;
         }
-
-        h1 {
-            color: #6C55F9;
-            text-align: center;
-            font-size: 48px;
-            margin-bottom: 40px;
+        .widget {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
+        .widget h3 {
+            margin-top: 0;
+            color: #1da1f2;
+            border-bottom: 2px solid #1da1f2;
+            padding-bottom: 10px;
+        }
         .post-form {
             display: flex;
             flex-direction: column;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
         }
-
-        .post-form textarea {
-            width: 100%;
-            height: 160px;
-            padding: 20px;
-            font-size: 24px;
+        .post-form textarea, .comment-form textarea {
+            margin-bottom: 10px;
+            padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            resize: none;
+            font-size: 16px;
         }
-
-        .post-form input[type="file"] {
-            margin-bottom: 20px;
-        }
-
-        .post-form button {
-            padding: 20px;
+        .post-form button, .comment-form button {
             background-color: #6C55F9;
             color: white;
             border: none;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 24px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
-
-        .post-form button:hover {
-            background-color: #4B3BBF;
+        .post-form button:hover, .comment-form button:hover {
+            background-color: #6C55F9;
         }
-
         .post {
-            background-color: #eae9ff;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 40px;
+            background-color: white;
+            border: 1px solid #e1e8ed;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
-
-        .post img, .post video {
+        .post img {
             max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-top: 20px;
+            border-radius: 15px;
+            margin-top: 10px;
         }
-
-        .post p {
-            margin: 0;
-            color: #333;
-            font-size: 24px;
-        }
-
         .post-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px;
         }
-
         .post-actions button {
-            background-color: #6C55F9;
-            color: white;
+            background-color: transparent;
             border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
+            padding: 5px 10px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
         }
-
         .post-actions button:hover {
-            background-color: #4B3BBF;
+            background-color: #e8f5fe;
         }
-
+        .post-actions button i {
+            margin-right: 5px;
+        }
+        .post-actions button.liked {
+            color: #e0245e;
+        }
         .comment-section {
-            margin-top: 30px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
+            margin-top: 10px;
+            display: none;
+            background-color: #f7f9fa;
+            border-radius: 15px;
+            padding: 15px;
         }
-
-        .comment-section textarea {
-            width: 100%;
-            height: 100px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .comment {
+            background-color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-
-        .comment-section button {
-            padding: 12px;
+        .trending-topic, .user-suggestion {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f7f9fa;
+            border-radius: 15px;
+            transition: background-color 0.3s;
+        }
+        .trending-topic:hover, .user-suggestion:hover {
+            background-color: #e8f5fe;
+        }
+         .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        .nav-item:hover {
+            background-color: #e8f5fe;
+        }
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 1.2em;
+            color: #6C55F9;
+        } 
+        .user-suggestion {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #6C55F9;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .upload-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .upload-button {
             background-color: #6C55F9;
             color: white;
             border: none;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
         }
-
-        .comment-section button:hover {
-            background-color: #4B3BBF;
+        .upload-button:hover {
+            background-color: #6C55F9;
         }
-
-        .comments {
-            margin-top: 20px;
+        .file-name {
+            font-size: 14px;
+            color: #657786;
         }
+        .anchor1{
+    color: black;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0 15px;
+}
 
-        .comment {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        @media (max-width: 768px) {
-            .side-menu {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-
-            .container, .trending-container {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
+.anchor1{
+    color: black;
+}
+.main_container_0{
+    display: flex;
+    justify-content:space-between;
+    height: 40px;
+    
+}
+.container2{
+    display: flex;
+    margin-top: 50px;
+    margin-right: 175px;
+    
+}
+.logo{
+    margin-left: 175px;
+}
+#map1{
+    color: #6C55F9;
+}
+#rew{
+    text-decoration: none;
+}
     </style>
 </head>
-<body onload="showHome()">
-    <!-- Side Menu -->
-    <div class="side-menu">
-        <h2>Navigation</h2>
-        <a href="index.html" onclick="showSection('home')">Home</a>
-        <a href="#" onclick="showSection('trending')">Trending</a>
-        <a href="#">Reports</a>
-        <a href="#">Profile</a>
-        <a href="http://127.0.0.1:5500/html/reward.html">Rewards</a>
-        <a href="#">Settings</a>
-    </div>
-
-    <!-- Home Section -->
-    <div class="container" id="home">
-        <h1>Water Bodies Blog</h1>
-
-        <!-- Post Form -->
-        <div class="post-form">
-            <textarea id="postContent" placeholder="What's happening with water bodies?"></textarea>
-            <input type="file" id="postMedia" accept="image/,video/">
-            <button id="submitButton" onclick="postContent()">Post</button>
-            <button id="createMoreButton" onclick="showSection('home')" style="display: none;">Create More Post</button>
+<body>
+    <div >
+        <nav  class="main_container_0">
+            <div class="logo">
+                <a class="navbar-brand" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_of_India_logo.svg" alt="Logo" height="100px" width="100px" class="d-inline-block align-text-top">
+        
+                  </a>
+    
+            </div>
+            <div class="container2">
+                <div class="anchor_container">
+                    <a class="anchor1" href="index.html">Home</a>
+                </div>
+                <div class="anchor_container2">
+                    <a  class="anchor1" href="about.html">About</a>
+                </div>
+               <div class="anchor_container3">
+                <a  class="anchor1" href="blog.html" id="map1">Blog</a>
+               </div>
+               <div class="anchor_container4">
+                <a class="anchor1" href="index4.html" >Map</a>
+                </div>
+                <div class="anchor_container4">
+                    <a class="anchor1" href="ai.html" >Ask Ai</a>
+                    </div>
+                <div class="anchor_container5">
+                <a class="anchor1" href="contact.html">Contact</a>
+                </div>
+            </nav>
         </div>
-    </div>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="widget">
+                <h3>Navigation</h3>
+                <div class="nav-item"><i class="fas fa-user"></i> Profile</div>
+                <div class="nav-item"><i class="fas fa-list"></i> <a href="reward.html" id="rew">Rewards</a></div>
+                <div class="nav-item"><i class="fas fa-bookmark"></i> Bookmarks</div>
+            </div>
+            <div class="widget">
+                <h3>Trending Topics</h3>
+                <div id="trending-topics"></div>
+            </div>
+        </aside>
 
-    <!-- Trending Section -->
-    <div class="trending-container" id="trending">
-        <h1>Trending Posts</h1>
-        <div id="trendingFeed">
-            <!-- Trending posts will be dynamically added here -->
-        </div>
+        <main class="content">
+            <div class="widget">
+                <form class="post-form" id="post-form">
+                    <textarea placeholder="What's happening?" id="post-content"></textarea>
+                    <div class="upload-section">
+                        <button type="button" class="upload-button" id="upload-trigger">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                        <span class="file-name" id="file-name"></span>
+                    </div>
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    <button type="submit">Post</button>
+                </form>
+            </div>
+            <div id="posts-container"></div>
+        </main>
+
+        <aside class="suggestions">
+            <div class="widget">
+                <h3>Who to follow</h3>
+                <div id="user-suggestions"></div>
+            </div>
+        </aside>
     </div>
 
     <script>
-        function postContent() {
-            const postContent = document.getElementById('postContent').value;
-            const postMedia = document.getElementById('postMedia').files[0];
-            const submitButton = document.getElementById('submitButton');
-            const createMoreButton = document.getElementById('createMoreButton');
+         document.addEventListener('DOMContentLoaded', function() {
+            const postForm = document.getElementById('post-form');
+            const postContent = document.getElementById('post-content');
+            const imageUpload = document.getElementById('image-upload');
+            const uploadTrigger = document.getElementById('upload-trigger');
+            const fileName = document.getElementById('file-name');
+            const postsContainer = document.getElementById('posts-container');
+            const trendingTopics = document.getElementById('trending-topics');
+            const userSuggestions = document.getElementById('user-suggestions');
 
-            if (postContent.trim() === '') {
-                alert('Please enter some content!');
-                return;
+            // ... (previous JavaScript code remains the same) ...
+
+            uploadTrigger.addEventListener('click', function() {
+                imageUpload.click();
+            });
+
+            imageUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = this.files[0].name;
+                } else {
+                    fileName.textContent = '';
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const postForm = document.getElementById('post-form');
+            const postContent = document.getElementById('post-content');
+            const imageUpload = document.getElementById('image-upload');
+            const postsContainer = document.getElementById('posts-container');
+            const trendingTopics = document.getElementById('trending-topics');
+            const userSuggestions = document.getElementById('user-suggestions');
+
+            // Initialize trending topics
+            const topics = ['#JavaScript', '#WebDevelopment', '#AI', '#MachineLearning', '#TechNews'];
+            topics.forEach(topic => {
+                const topicElement = document.createElement('div');
+                topicElement.className = 'trending-topic';
+                topicElement.innerHTML = `<i class="fas fa-chart-line"></i> ${topic}`;
+                trendingTopics.appendChild(topicElement);
+            });
+
+            // Initialize user suggestions
+            const users = ['John Doe', 'Jane Smith', 'Web Dev', 'Tech Guru', 'Code Master'];
+            users.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user-suggestion';
+                userElement.innerHTML = `
+                    <div class="user-avatar">${user.charAt(0)}</div>
+                    <div>
+                        <div>${user}</div>
+                        <div style="color: #657786;">@${user.toLowerCase().replace(' ', '')}</div>
+                    </div>
+                `;
+                userSuggestions.appendChild(userElement);
+            });
+
+            postForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const content = postContent.value;
+                const file = imageUpload.files[0];
+                
+                if (content || file) {
+                    createPost(content, file);
+                    postContent.value = '';
+                    imageUpload.value = '';
+                }
+            });
+
+            function createPost(content, file) {
+                const post = document.createElement('div');
+                post.className = 'post';
+                
+                if (content) {
+                    const postText = document.createElement('p');
+                    postText.textContent = content;
+                    post.appendChild(postText);
+                }
+                
+                if (file) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    post.appendChild(img);
+                }
+                
+                const postActions = document.createElement('div');
+                postActions.className = 'post-actions';
+                
+                const likeButton = createLikeButton();
+                const commentButton = createCommentButton();
+                const shareButton = createActionButton('Share', 'fas fa-share');
+                
+                postActions.appendChild(likeButton);
+                postActions.appendChild(commentButton);
+                postActions.appendChild(shareButton);
+                
+                post.appendChild(postActions);
+
+                const commentSection = createCommentSection();
+                post.appendChild(commentSection);
+                
+                postsContainer.prepend(post);
             }
 
-            const postContainer = document.createElement('div');
-            postContainer.className = 'post';
-
-            const postText = document.createElement('p');
-            postText.innerText = postContent;
-            postContainer.appendChild(postText);
-
-            if (postMedia) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (postMedia.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        postContainer.appendChild(img);
-                    } else if (postMedia.type.startsWith('video/')) {
-                        const video = document.createElement('video');
-                        video.controls = true;
-                        video.src = e.target.result;
-                        postContainer.appendChild(video);
+            function createLikeButton() {
+                const button = document.createElement('button');
+                button.innerHTML = '<i class="far fa-heart"></i> Like';
+                let liked = false;
+                button.addEventListener('click', function() {
+                    liked = !liked;
+                    if (liked) {
+                        button.innerHTML = '<i class="fas fa-heart"></i> Liked';
+                        button.classList.add('liked');
+                    } else {
+                        button.innerHTML = '<i class="far fa-heart"></i> Like';
+                        button.classList.remove('liked');
                     }
-                };
-                reader.readAsDataURL(postMedia);
+                });
+                return button;
             }
 
-            const postActions = document.createElement('div');
-            postActions.className = 'post-actions';
-            const likeButton = document.createElement('button');
-            likeButton.innerText = 'Like';
-            likeButton.onclick = function() {
-                likeButton.innerText = 'Liked';
-            };
-            const commentButton = document.createElement('button');
-            commentButton.innerText = 'Comment';
-            commentButton.onclick = function() {
-                toggleCommentSection(postContainer);
-            };
-            postActions.appendChild(likeButton);
-            postActions.appendChild(commentButton);
-            postContainer.appendChild(postActions);
-
-            const commentSection = document.createElement('div');
-            commentSection.className = 'comment-section';
-            commentSection.style.display = 'none';
-            const commentTextarea = document.createElement('textarea');
-            commentTextarea.placeholder = 'Write a comment...';
-            const commentSubmitButton = document.createElement('button');
-            commentSubmitButton.innerText = 'Submit';
-            commentSubmitButton.onclick = function() {
-                addComment(commentSection, commentTextarea.value);
-                commentTextarea.value = '';
-            };
-            commentSection.appendChild(commentTextarea);
-            commentSection.appendChild(commentSubmitButton);
-            postContainer.appendChild(commentSection);
-
-            // Add the post to the Trending section
-            document.getElementById('trendingFeed').appendChild(postContainer);
-
-            // Show confirmation message and create more post button
-            submitButton.innerText = 'Your post has been created!';
-            createMoreButton.style.display = 'inline-block';
-
-            // Hide the home section and switch to trending
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('trending').style.display = 'block';
-        }
-
-        function addComment(commentSection, commentText) {
-            if (commentText.trim() === '') {
-                alert('Please enter a comment!');
-                return;
+            function createCommentButton() {
+                const button = document.createElement('button');
+                button.innerHTML = '<i class="far fa-comment"></i> Comment';
+                button.addEventListener('click', function() {
+                    const commentSection = this.closest('.post').querySelector('.comment-section');
+                    if (commentSection.style.display === 'none') {
+                        commentSection.style.display = 'block';
+                        button.innerHTML = '<i class="fas fa-comment"></i> Comment';
+                    } else {
+                        commentSection.style.display = 'none';
+                        button.innerHTML = '<i class="far fa-comment"></i> Comment';
+                    }
+                });
+                return button;
             }
 
-            const comment = document.createElement('div');
-            comment.className = 'comment';
-            comment.innerText = commentText;
-            commentSection.appendChild(comment);
-        }
+            function createActionButton(text, iconClass) {
+                const button = document.createElement('button');
+                button.innerHTML = `<i class="${iconClass}"></i> ${text}`;
+                button.addEventListener('click', function() {
+                    alert(`${text} clicked!`);
+                });
+                return button;
+            }
 
-        function toggleCommentSection(postContainer) {
-            const commentSection = postContainer.querySelector('.comment-section');
-            commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
-        }
+            function createCommentSection() {
+                const section = document.createElement('div');
+                section.className = 'comment-section';
+                section.style.display = 'none';
 
-        function showSection(sectionId) {
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('trending').style.display = 'none';
-            document.getElementById(sectionId).style.display = 'block';
-        }
+                const form = document.createElement('form');
+                form.className = 'comment-form';
+                
+                const textarea = document.createElement('textarea');
+                textarea.placeholder = 'Write a comment...';
+                form.appendChild(textarea);
 
-        function showHome() {
-            document.getElementById('home').style.display = 'block';
-            document.getElementById('trending').style.display = 'none';
-        }
+                const submitButton = document.createElement('button');
+                submitButton.textContent = 'Reply';
+                form.appendChild(submitButton);
+
+                const commentsContainer = document.createElement('div');
+                commentsContainer.className = 'comments-container';
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (textarea.value.trim()) {
+                        const commentElement = document.createElement('div');
+                        commentElement.className = 'comment';
+                        commentElement.textContent = textarea.value;
+                        commentsContainer.appendChild(commentElement);
+                        textarea.value = '';
+                    }
+                });
+
+                section.appendChild(form);
+                section.appendChild(commentsContainer);
+
+                return section;
+            }
+        });
     </script>
 </body>
 </html>
